@@ -6,7 +6,7 @@
             "request": "launch",
             "mainClass": "com.uriegas.MainApp",
             "projectName": "register",
-            "vmArgs": "--module-path /usr/lib/jvm/java-11-openjfx/lib --add-modules=javafx.controls,javafx.fxml -cp target/practicaFX-1.0-SNAPSHOT.jar:target/libs/*",
+            "vmArgs": "--module-path /usr/lib/jvm/java-11-openjfx/lib --add-modules=javafx.controls,javafx.fxml -cp target/register-1.0-SNAPSHOT.jar:target/libs/*",
         }
     ]
 }
