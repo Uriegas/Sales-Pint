@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS offers (
     id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL,
     product_id INTEGER NOT NULL,
-    quantity INTEGER NOT NULL,
-    price REAL NOT NULL,
     FOREIGN KEY(product_id) REFERENCES products(id)
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS sales (
     FOREIGN KEY(product_id) REFERENCES products(id),
     FOREIGN KEY(order_id) REFERENCES orders(id)
 );
-
+-- An order is a bunch of sales
 CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     date TEXT NOT NULL
