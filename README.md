@@ -7,9 +7,9 @@ Se necesita la implementación de una caja registradora (stand alone) la cual te
     * CRUD de inventarios, (Altas, Bajas, Modificaciones de productos en el inventario)
     * Datos del producto: Nombre, descripción, num. de código de barras
     * Busqueda de producto: Por nombre, código de barra
-    * Registro y cancelación de promosiones (Tipo de promosiones válidas: 2x1, 3x2, 10%, 20, 30% y 50%)
+    * Registro y cancelación de promociones (Tipo de promosiones válidas: 2x1, 3x2, 10%, 20, 30% y 50%)
     * Registro de compras, cancelaciones de productos, aplicación de promociones.
-    * Uso de SQLite como gestor de base de datos.
   * No funcionales
+    * Uso de SQLite como gestor de base de datos.
     * No se requiere inicio de sesión
     * Diseño de pantallas "estéticas" mediante uso de JavaFX-CSS
