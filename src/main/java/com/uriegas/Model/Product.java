@@ -12,6 +12,10 @@ public class Product implements Searchable {
     private DoubleProperty price = new SimpleDoubleProperty();
     private IntegerProperty stock = new SimpleIntegerProperty();
     /**
+     * Empty constructor, used in add new products.
+     */
+    public Product(){}
+    /**
      * DB constructor (includes id)
      * @param id
      * @param name

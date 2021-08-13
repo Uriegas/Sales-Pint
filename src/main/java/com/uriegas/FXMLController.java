@@ -1,6 +1,7 @@
 package com.uriegas;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.*;
 import com.uriegas.Model.*;
@@ -114,7 +115,7 @@ public class FXMLController implements Initializable {
         this.carrito.setCellFactory(cellFactory);
 
         addbtn.setOnAction(event -> {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
+            addProductDialog(new Product());
             
         });
         updatebtn.setOnAction(event -> {
@@ -139,10 +140,60 @@ public class FXMLController implements Initializable {
         });
     }
     /**
+     * Dialog to delete a product
+     * @param p selected product
+     */
+    private void deleteProductDialog(Product product) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete product");
+        alert.setHeaderText("Delete product");
+        alert.setContentText("Are you sure you want to delete this product?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            try{
+                model.deleteProduct(product);
+            }catch(Exception e){
+                Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                alert2.setTitle("Error");
+                alert2.setHeaderText("An error ocurred");
+                alert2.setContentText("Could not delete this product");
+                alert2.showAndWait();
+            }
+        }
+    }
+    /**
      * Dialog to add a product
+     * @param p an empty product
+     */
+    private void addProductDialog(Product p) {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
+            Parent root = loader.load();
+            ProductDialogController controller = loader.getController();
+            controller.setProduct(p);
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Add/modify product");
+            dialog.setDialogPane((DialogPane)root);
+            dialog.showAndWait().ifPresent(button -> {
+                if(button.equals(ButtonType.OK)){//Save product to database
+                    System.out.println("INFO " + p.toString());
+                    this.model.addNewProduct(p);
+                }
+            });
+        }catch(Exception e){//Show alert
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Couldn't perform this action.");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    /**
+     * Dialog to update a product
+     * @param p the selected product
      */
     private void updateProductDialog(Product p){
-        System.out.println("Add/modify product");
         try{
             final Product copy = p.clone();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
@@ -150,7 +201,7 @@ public class FXMLController implements Initializable {
             ProductDialogController controller = loader.getController();
             controller.setProduct(p);
             Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Add/modify product");
+            dialog.setTitle("Update product");
             dialog.setDialogPane((DialogPane)root);
             dialog.showAndWait().ifPresent(button -> {
                 if(button.equals(ButtonType.CANCEL)){
