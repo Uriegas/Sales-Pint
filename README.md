@@ -1,10 +1,15 @@
 # Actividad de recuperacion Unidad 2
 ## Caja registradora
 
-## TODO
-Add a list of products that in the Model for the CRUD of inventory
-Apply ofertongos
-Change CSS
+## RUN
+To run this project type: 
+```
+mvn clean javafx:run
+```
+
+## Example
+
+![](muestra.png)
 
 Se necesita la implementación de una caja registradora (stand alone) la cual tenga las funcionalidades completas de gestón de inventarios, gestión de promociones y  registro de compras. Se necesta implementar los siguientes requerimientos
 
