@@ -2,8 +2,7 @@
 ## Caja registradora
 
 ## TODO
-DELETE in DB
-ADD using DB
+Add a list of products that in the Model for the CRUD of inventory
 Apply ofertongos
 Change CSS
 
