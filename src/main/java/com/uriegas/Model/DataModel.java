@@ -101,7 +101,7 @@ public class DataModel {
      * Insert or update a product in the database 
      */
     public void upsertProduct(Product product) throws SQLException {
-        String query = "INSERT INTO " + PRODUCTS + " VALUES (?, ?, ?, ?, ?, ?)" +
+        String query = "INSERT INTO " + PRODUCTS +
                        " ON CONFLICT (id) DO UPDATE SET name = " + product.getName() +
                        ", description = " + product.getDescription() +
                        ", price = " + product.getPrice() + ", stock = " + product.getStock();
@@ -145,5 +145,33 @@ public class DataModel {
         stmt.close();
         rs.close();
         return products;
+    }
+    public void updateProduct(Product p) throws SQLException {
+        String query = "UPDATE " + PRODUCTS + " SET name = '" + p.getName() +
+                       "', description = '" + p.getDescription() +
+                       "', price = " + p.getPrice() + ", stock = " + p.getStock() +
+                       " WHERE id = " + p.getId();
+        System.out.println(INFO + "Query is: " + query);
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println(INFO + " " + LocalDate.now() + " " + "Product " + p.getName() + " updated");
+    }
+    /**
+     * Commit the current cart to the database, reduce the stock and create new sales and order
+     */
+    public void makeSale() throws SQLException {
+        ObservableList<Product> products = getProducts();
+        //Quasi O(n^2) loop :-(
+        for(Product product : cart) {
+            for(Product p : products) {
+                if(p.getId() == product.getId()) {
+                    p.setStock(p.getStock() - product.getStock());
+                    break;
+                }
+            }
+        }
+        for(Product product : products)
+            updateProduct(product);
+        // Reduce the stock of the products in the cart
     }
 }

@@ -116,6 +116,23 @@ public class FXMLController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
             
         });
+        commitsale.setOnAction(event -> {
+            try{
+                this.model.makeSale();
+                //Show success message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sale");
+                alert.setHeaderText("Sale successful");
+                alert.setContentText("The sale was successful");
+                alert.showAndWait();
+            }catch(Exception e){//Show alert
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(e.getClass().getName());
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        });
     }
     /**
      * Dialog to add a product
@@ -126,24 +143,13 @@ public class FXMLController implements Initializable {
     private void addOfferDialog(){
         System.out.println("Add/modify offer");
     }
-    /**
-     * Add the selected product or offer to the carrito
-     */
-    private void addProductToCart(Searchable s){
-        System.out.println("Add product to cart");
-        if(s instanceof Product){
-            Product p = (Product) s;
-            System.out.println("Product: " + p.toString());
-            
-        }
-    }
     private boolean searchFind(Searchable s, String search){
         return String.valueOf(s.getId()).contains(search) || s.getName().toString().toLowerCase().contains(search.toLowerCase()) || s.getDescription().toString().toLowerCase().contains(search.toLowerCase());
     }
     private Predicate<Searchable> createPredicate(String searchText){
-    return searchable -> {
-        if (searchText == null || searchText.isEmpty()) return true;
-        return searchFind(searchable, searchText);
-    };
-}
+        return searchable -> {
+            if (searchText == null || searchText.isEmpty()) return true;
+            return searchFind(searchable, searchText);
+        };
+    }
 }
