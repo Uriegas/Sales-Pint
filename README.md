@@ -2,9 +2,10 @@
 ## Caja registradora
 
 ## TODO
-DELETE in GUI and DB
+DELETE in DB
 ADD using DB
 Apply ofertongos
+Change CSS
 
 Se necesita la implementación de una caja registradora (stand alone) la cual tenga las funcionalidades completas de gestón de inventarios, gestión de promociones y  registro de compras. Se necesta implementar los siguientes requerimientos
 

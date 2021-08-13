@@ -174,4 +174,18 @@ public class DataModel {
             updateProduct(product);
         // Reduce the stock of the products in the cart
     }
+    public void deleteProduct(Product product) throws SQLException {
+        String query = "DELETE FROM " + PRODUCTS + " WHERE id = " + product.getId();
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println(INFO + " " + LocalDate.now() + " " + "Product " + product.getName() + " deleted");
+    }
+    public void addProduct(Product product) throws SQLException {
+        String query = "INSERT INTO " + PRODUCTS +
+                       " (id, name, description, price, stock) VALUES (" + product.getId() + ", '" + product.getName() +
+                       "', '" + product.getDescription() + "', " + product.getPrice() + ", " + product.getStock() + ")";
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println(INFO + " " + LocalDate.now() + " " + "Product " + product.getName() + " added");
+    }
 }

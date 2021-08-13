@@ -121,6 +121,9 @@ public class FXMLController implements Initializable {
         updatebtn.setOnAction(event -> {
             updateProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
         });
+        deletebtn.setOnAction(event -> {
+            deleteProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
+        });
         commitsale.setOnAction(event -> {
             try{
                 this.model.makeSale();
@@ -177,7 +180,15 @@ public class FXMLController implements Initializable {
             dialog.showAndWait().ifPresent(button -> {
                 if(button.equals(ButtonType.OK)){//Save product to database
                     System.out.println("INFO " + p.toString());
-                    this.model.addNewProduct(p);
+                    try{
+                        this.model.addProduct(p);
+                    }catch(Exception e){
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Couldn't add this product to the DB");
+                        alert.setContentText(e.getMessage());
+                        alert.showAndWait();
+                    }
                 }
             });
         }catch(Exception e){//Show alert
