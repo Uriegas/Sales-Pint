@@ -4,8 +4,9 @@ import javafx.application.*;
 import com.uriegas.Model.*;
 import javafx.fxml.*;
 import javafx.scene.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.*;
-
 
 public class MainApp extends Application {
 
@@ -22,8 +23,20 @@ public class MainApp extends Application {
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
         
-        stage.setTitle("JavaFX and Maven");
+        stage.setTitle("Caja registradora");
         stage.setScene(scene);
+        stage.setOnCloseRequest(e -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setHeaderText("Are you sure you want to exit?");
+            alert.setContentText("You are about to exit the application.");
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK)
+                    System.exit(0);
+                else
+                    e.consume();
+            });
+        });
         stage.show();
     }
 
