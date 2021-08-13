@@ -13,18 +13,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox prefHeight="487.0" prefWidth="751.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.FXMLController">
+<HBox prefHeight="487.0" prefWidth="751.0" styleClass="background-pane" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.FXMLController">
    <children>
       <VBox prefHeight="487.0" prefWidth="450.0">
          <children>
-            <StackPane prefWidth="248.0">
+            <StackPane prefWidth="248.0" styleClass="column-header-background">
                <children>
-                  <TextField fx:id="searchbar" alignment="BASELINE_RIGHT" StackPane.alignment="TOP_LEFT">
+                  <TextField fx:id="searchbar" alignment="BASELINE_RIGHT" styleClass="transparent-background" StackPane.alignment="TOP_LEFT">
                      <StackPane.margin>
-                        <Insets left="50.0" right="50.0" />
+                        <Insets left="30.0" right="30.0" />
                      </StackPane.margin></TextField>
-                  <Button fx:id="search_btn" text="Button" StackPane.alignment="CENTER_RIGHT" />
-                  <Button fx:id="clear_btn" text="Button" StackPane.alignment="CENTER_LEFT" />
+                  <Button fx:id="search_btn" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" prefHeight="30.0" prefWidth="30.0" styleClass="search-button" text="Button" StackPane.alignment="CENTER_RIGHT" />
+                  <Button fx:id="clear_btn" styleClass="exit-button" text="Button" StackPane.alignment="CENTER_LEFT" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -32,9 +32,15 @@
             </StackPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                  <Button fx:id="addbtn" mnemonicParsing="false" text="Add" />
-                <Button fx:id="updatebtn" mnemonicParsing="false" text="Update" />
-                  <Button fx:id="deletebtn" mnemonicParsing="false" text="Delete" />
+                  <Button fx:id="addbtn" mnemonicParsing="false" styleClass="button-add-new" text="Add">
+                     <padding>
+                        <Insets right="2.0" />
+                     </padding></Button>
+                <Button fx:id="updatebtn" mnemonicParsing="false" styleClass="button-update" text="Update">
+                     <padding>
+                        <Insets right="8.0" />
+                     </padding></Button>
+                  <Button fx:id="deletebtn" mnemonicParsing="false" styleClass="delete-button" text="Delete" />
               </buttons>
                <VBox.margin>
                   <Insets left="5.0" right="5.0" />
@@ -42,10 +48,10 @@
             </ButtonBar>
             <TableView fx:id="searchableproducts" prefWidth="310.0" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="productid" editable="false" minWidth="9.0" prefWidth="78.0" text="ID" />
-                <TableColumn fx:id="productname" editable="false" prefWidth="114.0" text="Producto" />
-                <TableColumn fx:id="productdescription" editable="false" prefWidth="177.0" text="Descripcion" />
-                  <TableColumn fx:id="carrito" prefWidth="65.0" text="Carrito" />
+                <TableColumn fx:id="productid" editable="false" minWidth="9.0" prefWidth="63.0" text="ID" />
+                <TableColumn fx:id="productname" editable="false" prefWidth="106.0" text="Producto" />
+                <TableColumn fx:id="productdescription" editable="false" prefWidth="181.0" text="Descripcion" />
+                  <TableColumn fx:id="carrito" prefWidth="67.0" text="Carrito" />
               </columns>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -65,7 +71,7 @@
                         <Insets top="3.0" />
                      </HBox.margin></Text>
                   <Separator prefWidth="200.0" visible="false" />
-                  <Button fx:id="settings_btn" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="Ajustes" />
+                  <Button fx:id="settings_btn" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" styleClass="git-button" text="Ajustes" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -73,9 +79,9 @@
             </HBox>
             <TableView fx:id="sales" prefHeight="447.0" prefWidth="274.0" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="salesproductname" prefWidth="153.0" text="Producto" />
+                <TableColumn fx:id="salesproductname" prefWidth="123.0" text="Producto" />
                 <TableColumn fx:id="salesproductquantity" prefWidth="67.0" text="Cantidad" />
-                  <TableColumn fx:id="salesproductprice" editable="false" minWidth="9.0" prefWidth="53.0" text="Precio" />
+                  <TableColumn fx:id="salesproductprice" editable="false" minWidth="9.0" prefWidth="72.0" text="Precio" />
               </columns>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -85,15 +91,15 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total:" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label" text="Total:" />
                         <Separator orientation="VERTICAL" prefHeight="200.0" visible="false" />
-                        <Label fx:id="totalprice" text="text" />
+                        <Label fx:id="totalprice" styleClass="title-text" text="text" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </VBox>
-                  <Button fx:id="commitsale" mnemonicParsing="false" prefHeight="26.0" prefWidth="117.0" text="Confirmar" StackPane.alignment="CENTER_RIGHT" />
+                  <Button fx:id="commitsale" maxWidth="136.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="136.0" styleClass="button-venta" text="Confirmar" StackPane.alignment="CENTER_RIGHT" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

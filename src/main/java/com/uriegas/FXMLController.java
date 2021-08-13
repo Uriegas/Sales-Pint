@@ -10,8 +10,10 @@ import javafx.collections.transformation.*;
 import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.util.*;
 import javafx.util.converter.DoubleStringConverter;
+import javafx.application.Application;
 import javafx.beans.property.*;
 /**
  * Controller for the main window
@@ -89,12 +91,22 @@ public class FXMLController implements Initializable {
         //             addOfferDialog();
         //     });
         // });
+        settings_btn.setOnAction(event -> {
+            new Application() {
+            @Override
+            public void start(Stage stage) {
+            }
+            }.getHostServices().showDocument("https://github.com/uriegas/");
+            event.consume();
+        });
         Callback<TableColumn<Searchable, Void>, TableCell<Searchable, Void>> cellFactory = new Callback<TableColumn<Searchable, Void>, TableCell<Searchable, Void>>() {
             @Override
             public TableCell<Searchable, Void> call(TableColumn<Searchable, Void> param) {
                 return new TableCell<Searchable, Void>() {
                     final Button btn = new Button("Agregar");
+                    //Add style to the button
                     {
+                        btn.getStyleClass().add("button-add");
                         btn.setOnAction(event -> {
                             // Searchable s = searchableproducts.getSelectionModel().getSelectedItem();
                             Searchable s = (Searchable) getTableView().getItems().get(getIndex());

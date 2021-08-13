@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <DialogPane prefHeight="250.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.ProductDialogController">
    <graphic>
       <GridPane>
