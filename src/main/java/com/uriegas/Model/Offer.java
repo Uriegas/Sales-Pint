@@ -5,23 +5,24 @@ import javafx.beans.property.*;
  * Representation of an offer.
  */
 public class Offer implements Searchable {
-    private IntegerProperty id;
-    private StringProperty name;
-    private StringProperty type;
-    private IntegerProperty product_id;
+    private IntegerProperty id = new SimpleIntegerProperty();
+    private StringProperty name = new SimpleStringProperty();
+    private StringProperty description = new SimpleStringProperty();
+    private IntegerProperty product_id = new SimpleIntegerProperty();
     /**
      * DB constructor (includes id)
      * @param id
      * @param name
-     * @param type
+     * @param description
      */
-    public Offer(int id, String name, String type, int product_id){ setId(id); setName(name); setType(type); setProduct_id(product_id); }
+    public Offer(int id, String name, String description, int product_id){ setId(id); setName(name); setDescription(description); setProduct_id(product_id); }
     /**
      * UI constructor (without id)
+     * @param id
      * @param name
-     * @param type
+     * @param description
      */
-    public Offer(String name, String type){ setName(name); setType(type); }
+    public Offer(int id, String name, String description){ setId(id); setName(name); setDescription(description); }
 
     // ==> Getters and Setters
     public IntegerProperty idProperty(){ return id; }
@@ -30,9 +31,9 @@ public class Offer implements Searchable {
     public StringProperty nameProperty(){ return name; }
     public String getName(){ return name.get(); }
     public void setName(String name){ this.name.set(name); }
-    public StringProperty typeProperty(){ return type; }
-    public String getType(){ return type.get(); }
-    public void setType(String type){ this.type.set(type); }
+    public StringProperty descriptionProperty(){ return description; }
+    public String getDescription(){ return description.get(); }
+    public void setDescription(String description){ this.description.set(description); }
     public IntegerProperty product_idProperty(){ return product_id; }
     public int getProduct_id(){ return product_id.get(); }
     public void setProduct_id(int product_id){ this.product_id.set(product_id); }
@@ -40,4 +41,5 @@ public class Offer implements Searchable {
     public int compareTo(Searchable o){
         return Integer.valueOf(this.getId()).compareTo(Integer.valueOf(o.getId()));
     }
+    public String toString(){ return "Offer(" + getId() + ")" + ", " + getName() + ", " + getDescription() + ", " + getProduct_id(); }
 }

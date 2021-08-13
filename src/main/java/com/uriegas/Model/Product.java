@@ -6,10 +6,11 @@ import javafx.beans.property.*;
  * Representation of a product.
  */
 public class Product implements Searchable {
-    private IntegerProperty id;
-    private StringProperty name;
-    private StringProperty description;
-    private DoubleProperty price;
+    private IntegerProperty id = new SimpleIntegerProperty();
+    private StringProperty name = new SimpleStringProperty();
+    private StringProperty description = new SimpleStringProperty();
+    private DoubleProperty price = new SimpleDoubleProperty();
+    private IntegerProperty stock = new SimpleIntegerProperty();
     /**
      * DB constructor (includes id)
      * @param id
@@ -17,7 +18,7 @@ public class Product implements Searchable {
      * @param description
      * @param price
      */
-    public Product(int id, String name, String description, double price) { setId(id); setName(name); setDescription(description); setPrice(price); }
+    public Product(int id, String name, String description, double price, int stock) { setId(id); setName(name); setDescription(description); setPrice(price); setStock(stock); }
     /**
      * UI constructor (without id)
      * @param name
@@ -25,6 +26,13 @@ public class Product implements Searchable {
      * @param price
      */
     public Product(String name, String description, double price) { setName(name); setDescription(description); setPrice(price); }
+    /**
+     * Searchable constructor
+     * @param id
+     * @param name
+     * @param description
+     */
+    // public Product(int id, String name, String description) { setId(id); setName(name); setDescription(description); }
 
     // ==> Getters and Setters
     public IntegerProperty idProperty(){ return id; }
@@ -39,8 +47,12 @@ public class Product implements Searchable {
     public DoubleProperty priceProperty(){ return price; }
     public double getPrice(){ return price.get(); }
     public void setPrice(double price){ this.price.set(price); }
+    public IntegerProperty stockProperty(){ return stock; }
+    public int getStock(){ return stock.get(); }
+    public void setStock(int stock){ this.stock.set(stock); }
     // <== Getters and Setters
     public int compareTo(Searchable o){
         return Integer.valueOf(this.getId()).compareTo(Integer.valueOf(o.getId()));
     }
+    public String toString(){ return "Product(" + getId() + "): " + getName() + ", " + getDescription() + ", " + getPrice() + ", " + getStock(); }
 }
