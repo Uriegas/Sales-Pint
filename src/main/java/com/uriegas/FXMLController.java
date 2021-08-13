@@ -2,11 +2,16 @@ package com.uriegas;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.*;
 import com.uriegas.Model.*;
+import javafx.collections.*;
+import javafx.collections.transformation.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import javafx.util.Callback;
-
+import javafx.util.*;
+/**
+ * Controller for the main window
+ */
 public class FXMLController implements Initializable {
     DataModel model;
 
@@ -28,18 +33,27 @@ public class FXMLController implements Initializable {
     @FXML private Button addbtn;
     @FXML private Button updatebtn;
     @FXML private Button deletebtn;
-
-    public void initModel(DataModel model) {
+    /**
+     * Get the model
+     */
+    public void initModel(DataModel model) {    
         if(this.model != null)
             throw new NullPointerException("Model is already initialized, can only initialize it once");
         else
             this.model = model;
         // ==> Data binding
-        this.searchableproducts.setItems(this.model.getSearchables());
+        FilteredList<Searchable> filteredList = new FilteredList<>(this.model.getSearchables());
+        searchableproducts.setItems(filteredList);
+        searchbar.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(createPredicate(newValue));
+        });
+        // this.searchableproducts.setItems(this.model.getSearchables());
         // totalprice.textProperty().bindBidirectional(model.sProperty());
         // <== Data binding
     }
-    
+    /**
+     * Constructor
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.productname.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -88,12 +102,18 @@ public class FXMLController implements Initializable {
             
         });
     }
+    /**
+     * Dialog to add a product
+     */
     private void addProductDialog(){
         System.out.println("Add/modify product");
     }
     private void addOfferDialog(){
         System.out.println("Add/modify offer");
     }
+    /**
+     * Add the selected product or offer to the carrito
+     */
     private void addProductToCart(Searchable s){
         System.out.println("Add product to cart");
         if(s instanceof Product){
@@ -102,4 +122,13 @@ public class FXMLController implements Initializable {
             
         }
     }
+    private boolean searchFind(Searchable s, String search){
+        return String.valueOf(s.getId()).contains(search) || s.getName().toString().toLowerCase().contains(search.toLowerCase()) || s.getDescription().toString().toLowerCase().contains(search.toLowerCase());
+    }
+    private Predicate<Searchable> createPredicate(String searchText){
+    return searchable -> {
+        if (searchText == null || searchText.isEmpty()) return true;
+        return searchFind(searchable, searchText);
+    };
+}
 }
