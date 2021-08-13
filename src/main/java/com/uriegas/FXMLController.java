@@ -38,6 +38,7 @@ public class FXMLController implements Initializable {
     @FXML private Button updatebtn;
     @FXML private Button deletebtn;
     DoubleProperty totalpriceProperty = new SimpleDoubleProperty(0.00);
+    private FilteredList<Searchable> filteredList;
     /**
      * Get the model
      */
@@ -47,7 +48,7 @@ public class FXMLController implements Initializable {
         else
             this.model = model;
         // ==> Data binding
-        FilteredList<Searchable> filteredList = new FilteredList<>(this.model.getSearchables());
+        this.filteredList = new FilteredList<>(this.model.getSearchables());
         searchableproducts.setItems(filteredList);
         searchbar.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredList.setPredicate(createPredicate(newValue));
@@ -147,21 +148,29 @@ public class FXMLController implements Initializable {
      * @param p selected product
      */
     private void deleteProductDialog(Product product) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete product");
-        alert.setHeaderText("Delete product");
-        alert.setContentText("Are you sure you want to delete this product?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            try{
-                model.deleteProduct(product);
-            }catch(Exception e){
-                Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                alert2.setTitle("Error");
-                alert2.setHeaderText("An error ocurred");
-                alert2.setContentText("Could not delete this product");
-                alert2.showAndWait();
+        if(product != null){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete product");
+            alert.setHeaderText("Delete product");
+            alert.setContentText("Are you sure you want to delete this product?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                try{
+                    model.deleteProduct(product);
+                }catch(Exception e){
+                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                    alert2.setTitle("Error");
+                    alert2.setHeaderText("An error ocurred");
+                    alert2.setContentText("Could not delete this product");
+                    alert2.showAndWait();
+                }
             }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error ocurred");
+            alert.setContentText("You haven't select any product yet");
+            alert.showAndWait();
         }
     }
     /**
@@ -182,6 +191,12 @@ public class FXMLController implements Initializable {
                     System.out.println("INFO " + p.toString());
                     try{
                         this.model.addProduct(p);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText("Product added");
+                        alert.setContentText("The product will appear in the list the next time you start the app");
+                        alert.showAndWait();
+                        
                     }catch(Exception e){
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
@@ -222,6 +237,18 @@ public class FXMLController implements Initializable {
                     p.setStock(copy.getStock());
                     p.setPrice(copy.getPrice());
                     System.out.println("Cancel");
+                }
+                else if(button.equals(ButtonType.OK)){
+                    System.out.println("INFO " + p.toString());
+                    try{
+                        this.model.updateProduct(p);
+                    }catch(Exception e){
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Couldn't update this product");
+                        alert.setContentText(e.getMessage());
+                        alert.showAndWait();
+                    }
                 }
             });
         }catch(Exception e){//Show alert

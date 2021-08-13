@@ -156,6 +156,16 @@ public class DataModel {
         stmt.executeUpdate(query);
         System.out.println(INFO + " " + LocalDate.now() + " " + "Product " + p.getName() + " updated");
     }
+    public void inserProductToDB(Product p) throws SQLException {
+        String query = "INSERT INTO " + PRODUCTS +
+                       " (name, description, price, stock) VALUES ('" + p.getName() +
+                       "', '" + p.getDescription() +
+                       "', " + p.getPrice() + ", " + p.getStock() + ")";
+        System.out.println(INFO + "Query is: " + query);
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println(INFO + " " + LocalDate.now() + " " + "Product " + p.getName() + " inserted");
+    }
     /**
      * Commit the current cart to the database, reduce the stock and create new sales and order
      */
