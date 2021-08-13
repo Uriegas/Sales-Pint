@@ -9,6 +9,8 @@ import javafx.collections.transformation.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.util.*;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.beans.property.*;
 /**
  * Controller for the main window
  */
@@ -24,15 +26,16 @@ public class FXMLController implements Initializable {
     @FXML private TableColumn<Searchable, String> productdescription;
     @FXML private TableColumn<Searchable, Integer> productid;
     @FXML private TableColumn<Searchable, Void> carrito;
-    @FXML private TableView<Searchable> sales;
-    @FXML private TableColumn<Searchable, String> salesproductname;
-    @FXML private TableColumn<Searchable, Integer> salesproductquantity;
-    @FXML private TableColumn<Searchable, Double> salesproductprice;
+    @FXML private TableView<Product> sales;
+    @FXML private TableColumn<Product, String> salesproductname;
+    @FXML private TableColumn<Product, Integer> salesproductquantity;
+    @FXML private TableColumn<Product, Double> salesproductprice;
     @FXML private Button commitsale;
     @FXML private Label totalprice;
     @FXML private Button addbtn;
     @FXML private Button updatebtn;
     @FXML private Button deletebtn;
+    DoubleProperty totalpriceProperty = new SimpleDoubleProperty(0.00);
     /**
      * Get the model
      */
@@ -47,15 +50,25 @@ public class FXMLController implements Initializable {
         searchbar.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredList.setPredicate(createPredicate(newValue));
         });
+        // totalprice.textProperty().bind(this.model.getCart().forEach(p -> p.getPrice() * p.getStock() ).sum());
+        this.sales.setItems(this.model.cartProperty());
         // this.searchableproducts.setItems(this.model.getSearchables());
         // totalprice.textProperty().bindBidirectional(model.sProperty());
+        this.totalprice.textProperty().bind(this.model.totalpriceProperty().asString());
         // <== Data binding
+        
     }
     /**
      * Constructor
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.salesproductname.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        this.salesproductquantity.setCellValueFactory(cellData -> cellData.getValue().stockProperty().asObject());
+        this.salesproductprice.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+
+        // StringConverter<? extends Number> converter = new DoubleStringConverter();
+
         this.productname.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         this.productdescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         this.productid.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
@@ -83,6 +96,7 @@ public class FXMLController implements Initializable {
                             // Searchable s = searchableproducts.getSelectionModel().getSelectedItem();
                             Searchable s = (Searchable) getTableView().getItems().get(getIndex());
                             System.out.println("INFO " + s.toString());
+                            model.addToCart(s);
                         });
                     }
                     @Override
@@ -97,6 +111,7 @@ public class FXMLController implements Initializable {
             }
         };
         this.carrito.setCellFactory(cellFactory);
+
         addbtn.setOnAction(event -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
             
