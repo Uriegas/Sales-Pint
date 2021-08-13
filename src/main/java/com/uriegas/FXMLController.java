@@ -7,6 +7,7 @@ import com.uriegas.Model.*;
 import javafx.collections.*;
 import javafx.collections.transformation.*;
 import javafx.fxml.*;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.util.*;
 import javafx.util.converter.DoubleStringConverter;
@@ -73,19 +74,19 @@ public class FXMLController implements Initializable {
         this.productdescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         this.productid.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 
-        settings_btn.setOnAction(event -> {
-            //Create dialog to choose between add a product or a offert
-            ChoiceDialog<String> dialog = new ChoiceDialog<>("Add/modify product", "Add/modify offer");
-            dialog.setHeaderText("Settings");
-            dialog.setContentText("Choose what you want to do");
-            // dialog.getDialogPane().getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());
-            dialog.showAndWait().ifPresent(choice -> {
-                if(choice.equals("Add/modify product"))//Create dialog to choose between add a product or a offert
-                    addProductDialog();
-                else if(choice.equals("Add/modify offer"))//Create dialog to choose between add a product or a offert
-                    addOfferDialog();
-            });
-        });
+        // settings_btn.setOnAction(event -> {
+        //     //Create dialog to choose between add a product or a offert
+        //     ChoiceDialog<String> dialog = new ChoiceDialog<>("Add/modify product", "Add/modify offer");
+        //     dialog.setHeaderText("Settings");
+        //     dialog.setContentText("Choose what you want to do");
+        //     // dialog.getDialogPane().getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());
+        //     dialog.showAndWait().ifPresent(choice -> {
+        //         if(choice.equals("Add/modify product"))//Create dialog for the selected product
+        //             // addProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
+        //         else if(choice.equals("Add/modify offer"))//Create dialog to choose between add a product or a offert
+        //             addOfferDialog();
+        //     });
+        // });
         Callback<TableColumn<Searchable, Void>, TableCell<Searchable, Void>> cellFactory = new Callback<TableColumn<Searchable, Void>, TableCell<Searchable, Void>>() {
             @Override
             public TableCell<Searchable, Void> call(TableColumn<Searchable, Void> param) {
@@ -116,6 +117,9 @@ public class FXMLController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
             
         });
+        updatebtn.setOnAction(event -> {
+            updateProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
+        });
         commitsale.setOnAction(event -> {
             try{
                 this.model.makeSale();
@@ -137,8 +141,34 @@ public class FXMLController implements Initializable {
     /**
      * Dialog to add a product
      */
-    private void addProductDialog(){
+    private void updateProductDialog(Product p){
         System.out.println("Add/modify product");
+        try{
+            final Product copy = p.clone();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
+            Parent root = loader.load();
+            ProductDialogController controller = loader.getController();
+            controller.setProduct(p);
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Add/modify product");
+            dialog.setDialogPane((DialogPane)root);
+            dialog.showAndWait().ifPresent(button -> {
+                if(button.equals(ButtonType.CANCEL)){
+                    p.setName(copy.getName());
+                    p.setDescription(copy.getDescription());
+                    p.setId(copy.getId());
+                    p.setStock(copy.getStock());
+                    p.setPrice(copy.getPrice());
+                    System.out.println("Cancel");
+                }
+            });
+        }catch(Exception e){//Show alert
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Make your that you have selected a product");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
     private void addOfferDialog(){
         System.out.println("Add/modify offer");

@@ -10,18 +10,19 @@ import javafx.util.*;
 import javafx.util.converter.*;
 
 public class ProductDialogController implements Initializable {
+    @FXML private TextField id;
     @FXML private TextField name;
     @FXML private TextField description;
     @FXML private TextField price;
-    private Product product;
+    @FXML private TextField stock;
 
-    private void setProduct(Product other) {
-        this.product = other;
-
+    public void setProduct(Product other) {
         name.textProperty().bindBidirectional(other.nameProperty());
         description.textProperty().bindBidirectional(other.descriptionProperty());
         StringConverter<Number> stringConverter = new NumberStringConverter();
         price.textProperty().bindBidirectional(other.priceProperty(), stringConverter);
+        stock.textProperty().bindBidirectional(other.stockProperty(), stringConverter);
+        id.textProperty().bindBidirectional(other.idProperty(), stringConverter);
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {

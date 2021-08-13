@@ -55,4 +55,5 @@ public class Product implements Searchable {
         return Integer.valueOf(this.getId()).compareTo(Integer.valueOf(o.getId()));
     }
     public String toString(){ return "Product(" + getId() + "): " + getName() + ", " + getDescription() + ", " + getPrice() + ", " + getStock(); }
+    public Product clone(){ return new Product(getId(), getName(), getDescription(), getPrice(), getStock()); }
 }
