@@ -37,6 +37,9 @@ public class DataModel {
     public void setTotalPrice(double totalprice) {
         this.totalpriceProperty.set(totalprice);
     }
+    public void addToTotalPrice(double price) {
+        this.totalpriceProperty.set(this.totalpriceProperty.get() + price);
+    }
     public double getTotalPrice() {
         return totalpriceProperty.get();
     }
@@ -46,7 +49,7 @@ public class DataModel {
         cart.addListener(new ListChangeListener<Product>() {
             @Override
             public void onChanged(Change<? extends Product> c) {
-                setTotalPrice(c.getList().stream().mapToDouble(p -> p.getPrice() * p.getStock()).sum());
+                setTotalPrice(cartProperty().stream().mapToDouble(p -> p.getPrice() * p.getStock()).sum());
             }
         });
     }
@@ -65,13 +68,15 @@ public class DataModel {
     public void addToCart(Searchable searchable) {
         if(searchable instanceof Product) {
             Product product = (Product) searchable;
+            int stock = 1;
             for(Product p : cart) {
                 if(p.getId() == product.getId()) {
-                    p.setStock(p.getStock() + 1);
-                    return;
+                    stock = p.getStock() + 1;
+                    cart.remove(p);
+                    break;
                 }
             }
-            cart.add(new Product(product.getId(), product.getName(), product.getDescription(), product.getPrice(), 1));
+            cart.add(new Product(product.getId(), product.getName(), product.getDescription(), product.getPrice(), stock));
             // cart.add(product);
         } else if(searchable instanceof Offer) {
             Offer offer = (Offer) searchable;
