@@ -22,7 +22,8 @@ public class DataModel {
     public static String OFFERS = "offers";
     public static String SALES = "sales";
     public static String ORDERS = "orders";//An order is a bunch of sales
-    public static int ID = 1, NAME = 2, DESCRIPTION = 3, TYPE = 3, PRICE = 4, PRODUCT_ID = 4, STOCK = 5;
+    public static String EMPLOYEES = "employees";//An order is a bunch of sales
+    public static int ID = 1, NAME = 2, DESCRIPTION = 3, TYPE = 3, PRICE = 4, PRODUCT_ID = 4, STOCK = 5, PASSWORD = 6;
 
     private Connection connection;
     //The cart is a list of products
@@ -197,5 +198,21 @@ public class DataModel {
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(query);
         System.out.println(INFO + " " + LocalDate.now() + " " + "Product " + product.getName() + " added");
+    }
+
+    public ObservableList<Searchable> getEmployee(){
+        String query = "SELECT * FROM " + EMPLOYEES;
+        ObservableList<Searchable> employees = FXCollections.observableArrayList();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next())
+                employees.add(new Employee(rs.getInt(ID), rs.getString(NAME), rs.getString(PASSWORD)));
+            stmt.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println(ERROR + " " + LocalDate.now() + " " + e.getMessage());
+        }
+        return employees;
     }
 }
