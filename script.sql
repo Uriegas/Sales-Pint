@@ -1,4 +1,4 @@
---id is barcode
+--Products table
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
@@ -7,6 +7,14 @@ CREATE TABLE IF NOT EXISTS products (
     stock INTEGER NOT NULL
 );
 
+-- New: Support multiple agents: admin and cashier
+CREATE TABLE IF NOT EXISTS employees (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    password TEXT NOT NULL
+);
+
+--NOT IMPLEMENTED
 CREATE TABLE IF NOT EXISTS offers (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
