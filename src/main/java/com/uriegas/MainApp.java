@@ -1,7 +1,6 @@
 package com.uriegas;
 
 import javafx.application.*;
-import com.uriegas.Model.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
@@ -13,12 +12,12 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
         Parent root = loader.load();
 
         // ==> Load model
-        AdminController controller = loader.getController();
-        controller.initModel(new DataModel());
+        // AdminController controller = loader.getController();
+        // controller.initModel(new DataModel());
         // <== Load model
 
         Scene scene = new Scene(root);

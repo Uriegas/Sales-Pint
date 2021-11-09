@@ -16,7 +16,7 @@ import javafx.beans.property.*;
 /**
  * Controller for the main window
  */
-public class FXMLController implements Initializable {
+public class CashierController implements Initializable {
     DataModel model;
 
     @FXML private TextField searchbar;
@@ -139,35 +139,9 @@ public class FXMLController implements Initializable {
                 alert.showAndWait();
             }
         });
-    // clear_btn.setOnAction(event -> {
-    //         try{
-    //             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EmployeeDialog.fxml"));
-    //             Parent root = loader.load();
-    //             EmployeeDialogController controller = loader.getController();
-    //             Employee employee = new Employee(12, "Eduardo", "hola");
-    //             System.out.println( DataModel.DEBUG + employee.toString());
-    //             controller.setEmployee(employee);
-    //             Dialog<ButtonType> dialog = new Dialog<>();
-    //             dialog.setTitle("Add Employee");
-    //             dialog.setDialogPane((DialogPane) root);
-    //             dialog.showAndWait().ifPresent(button -> {
-    //                 if (button == ButtonType.OK) {
-    //                     try {
-    //                         System.out.println("OK");
-    //                     } catch (Exception e) {
-    //                         e.printStackTrace();
-    //                     }
-    //                 }
-    //             });
-    //             System.out.println( DataModel.DEBUG + employee.toString());
-    //         }catch(Exception e){
-    //             Alert alert = new Alert(Alert.AlertType.ERROR);
-    //             alert.setTitle("Error");
-    //             alert.setHeaderText("Couldn't perform this action.");
-    //             alert.setContentText(e.getMessage());
-    //             alert.showAndWait();
-    //         }
-    //     });
+        clear_btn.setOnAction(event -> {
+            searchbar.clear();
+        });
     }
     /**
      * Dialog to delete a product

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox prefHeight="487.0" prefWidth="751.0" styleClass="background-pane" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.FXMLController">
+<HBox prefHeight="487.0" prefWidth="751.0" styleClass="background-pane" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.CashierController">
    <children>
       <VBox prefHeight="487.0" prefWidth="450.0">
          <children>
