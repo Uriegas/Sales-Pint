@@ -9,37 +9,47 @@ import javafx.collections.transformation.*;
 import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import javafx.util.*;
-import javafx.application.Application;
-import javafx.beans.property.*;
 /**
  * Controller for the main window
  */
 public class AdminController implements Initializable {
     DataModel model;
 
-    @FXML private TextField searchbar;
-    @FXML private Button search_btn;
-    @FXML private Button clear_btn;
-    @FXML private Button settings_btn;
-    @FXML private TableView<Searchable> searchableproducts;
-    @FXML private TableColumn<Searchable, String> productname;
-    @FXML private TableColumn<Searchable, String> productdescription;
-    @FXML private TableColumn<Searchable, Integer> productid;
-    @FXML private TableColumn<Searchable, Void> carrito; // Change for edit button maybe?
-    @FXML private TableView<Employee> searchableEmployees;
-    @FXML private TableColumn<Employee, Integer> employeesId;
-    @FXML private TableColumn<Employee, String> employeesName;
-    @FXML private Button commitsale;
-    @FXML private Label totalprice;
-    @FXML private Button addbtn;
-    @FXML private Button updatebtn;
-    @FXML private Button deletebtn;
-    DoubleProperty totalpriceProperty = new SimpleDoubleProperty(0.00);
-    private FilteredList<Searchable> filteredList;
+    // ==> Searchbars
+    @FXML private TextField searchProduct;
+    @FXML private TextField searchEmployee;
+    @FXML private Button clearSearchProduct;
+    @FXML private Button clearSearchEmployee;
+    // <== Searchbars
+
+    // ==> CRUD buttons
+    @FXML private Button addProduct;
+    @FXML private Button addEmployee;
+    @FXML private Button updateProduct;
+    @FXML private Button updateEmployee;
+    @FXML private Button deleteProduct;
+    @FXML private Button deleteEmployee;
+    // <== CRUD buttons
+
+    // ==> TableColumns
+    @FXML private TableView<Product> productTable;
+    @FXML private TableColumn<Product, Integer> productId;
+    @FXML private TableColumn<Product, String> productName;
+    @FXML private TableColumn<Product, String> productDescription;
+    @FXML private TableColumn<Product, Double> productPrice;
+
+    @FXML private TableView<Searchable> employeeTable;
+    @FXML private TableColumn<Searchable, Integer> employeeId;
+    @FXML private TableColumn<Searchable, String> employeeName;
+    @FXML private TableColumn<Searchable, String> employeePassword;
+    // <== TableColumns
+
+    private FilteredList<Product> filteredProductList;
+    private FilteredList<Searchable> filteredEmployeeList;
+
     /**
      * Get the model
+     * @param model the data model
      */
     public void initModel(DataModel model) {    
         if(this.model != null)
@@ -47,97 +57,60 @@ public class AdminController implements Initializable {
         else
             this.model = model;
         // ==> Data binding
-        this.filteredList = new FilteredList<>(this.model.getSearchables());
-        searchableproducts.setItems(filteredList);
-        searchbar.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredList.setPredicate(createPredicate(newValue));
+        try{//Get products and employees from DB
+            this.filteredProductList = new FilteredList<>(this.model.getProducts());
+            this.filteredEmployeeList = new FilteredList<>(this.model.getEmployees());
+        }catch(Exception e){
+            System.out.println(DataModel.ERROR + e);
+        }
+        productTable.setItems(filteredProductList);
+        searchProduct.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredProductList.setPredicate(createPredicate(newValue));
         });
-        // totalprice.textProperty().bind(this.model.getCart().forEach(p -> p.getPrice() * p.getStock() ).sum());
-        // this.sales.setItems(this.model.cartProperty());
-        // this.searchableproducts.setItems(this.model.getSearchables());
-        // totalprice.textProperty().bindBidirectional(model.sProperty());
-        this.totalprice.textProperty().bind(this.model.totalpriceProperty().asString());
+        employeeTable.setItems(filteredEmployeeList);
+        searchEmployee.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredEmployeeList.setPredicate(createPredicate(newValue));
+        });
         // <== Data binding
-        
     }
     /**
      * Constructor
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // this.salesproductname.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        // this.salesproductquantity.setCellValueFactory(cellData -> cellData.getValue().stockProperty().asObject());
-        // this.salesproductprice.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
 
-        // StringConverter<? extends Number> converter = new DoubleStringConverter();
+        // ==> Product Table and CRUD buttons
+        this.productName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        this.productDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+        this.productId.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        this.productPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
 
-        this.productname.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        this.productdescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
-        this.productid.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
-
-        settings_btn.setOnAction(event -> {
-            new Application() {
-            @Override
-            public void start(Stage stage) {
-            }
-            }.getHostServices().showDocument("https://github.com/uriegas/");
-            event.consume();
-        });
-        Callback<TableColumn<Searchable, Void>, TableCell<Searchable, Void>> cellFactory = new Callback<TableColumn<Searchable, Void>, TableCell<Searchable, Void>>() {
-            @Override
-            public TableCell<Searchable, Void> call(TableColumn<Searchable, Void> param) {
-                return new TableCell<Searchable, Void>() {
-                    final Button btn = new Button("Agregar");
-                    //Add style to the button
-                    {
-                        btn.getStyleClass().add("button-add");
-                        btn.setOnAction(event -> {
-                            // Searchable s = searchableproducts.getSelectionModel().getSelectedItem();
-                            Searchable s = (Searchable) getTableView().getItems().get(getIndex());
-                            System.out.println("INFO " + s.toString());
-                            model.addToCart(s);
-                        });
-                    }
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty)
-                            setGraphic(null);
-                        else 
-                            setGraphic(btn);
-                    }
-                };
-            }
-        };
-        this.carrito.setCellFactory(cellFactory);
-
-        addbtn.setOnAction(event -> {
+        addProduct.setOnAction(event -> {
             addProductDialog(new Product());
-            
         });
-        updatebtn.setOnAction(event -> {
-            updateProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
+        updateProduct.setOnAction(event -> {
+            updateProductDialog((Product)productTable.getSelectionModel().getSelectedItem());
         });
-        deletebtn.setOnAction(event -> {
-            deleteProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
+        deleteProduct.setOnAction(event -> {
+            deleteProductDialog((Product)productTable.getSelectionModel().getSelectedItem());
         });
-        commitsale.setOnAction(event -> {
-            try{
-                this.model.makeSale();
-                //Show success message
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sale");
-                alert.setHeaderText("Sale successful");
-                alert.setContentText("The sale was successful");
-                alert.showAndWait();
-            }catch(Exception e){//Show alert
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(e.getClass().getName());
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
-            }
+        // <== Product Table and CRUD buttons
+
+        // ==> Employee Table and CRUD buttons
+        this.employeeId.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        this.employeeName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        this.employeePassword.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+
+        addEmployee.setOnAction(event -> {
+            addEmployeeDialog(new Employee());
         });
+        updateEmployee.setOnAction(event -> {
+            updateEmployeeDialog((Employee)employeeTable.getSelectionModel().getSelectedItem());
+        });
+        deleteEmployee.setOnAction(event -> {
+            deleteEmployeeDialog((Employee)employeeTable.getSelectionModel().getSelectedItem());
+        });
+        // <== Employee Table and CRUD buttons
     }
     /**
      * Dialog to delete a product
@@ -255,6 +228,114 @@ public class AdminController implements Initializable {
             alert.showAndWait();
         }
     }
+
+    private void addEmployeeDialog(Employee e){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EmployeeDialog.fxml"));
+            Parent root = loader.load();
+            EmployeeDialogController controller = loader.getController();
+            controller.setEmployee(e);
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Add/modify employee");
+            dialog.setDialogPane((DialogPane)root);
+            dialog.showAndWait().ifPresent(button -> {
+                if(button.equals(ButtonType.OK)){//Save employee to database
+                    System.out.println("INFO " + e.toString());
+                    try{
+                        this.model.addEmployee(e);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText("Employee added");
+                        alert.setContentText("The employee will appear in the list the next time you start the app");
+                        alert.showAndWait();
+                        
+                    }catch(Exception ex){
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Couldn't add this employee to the DB");
+                        alert.setContentText(ex.getMessage());
+                        alert.showAndWait();
+                    }
+                }
+            });
+        }catch(Exception exception){//Show alert
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Couldn't perform this action.");
+            alert.setContentText(exception.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    private void updateEmployeeDialog(Employee e){
+        try{
+            final Employee copy = e.clone();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EmployeeDialog.fxml"));
+            Parent root = loader.load();
+            EmployeeDialogController controller = loader.getController();
+            controller.setEmployee(e);
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Update employee");
+            dialog.setDialogPane((DialogPane)root);
+            dialog.showAndWait().ifPresent(button -> {
+                if(button.equals(ButtonType.CANCEL)){
+                    e.setName(copy.getName());
+                    e.setId(copy.getId());
+                    e.setDescription(copy.getDescription());
+                    System.out.println("Cancel");
+                }
+                else if(button.equals(ButtonType.OK)){
+                    System.out.println("INFO " + e.toString());
+                    try{
+                        this.model.updateEmployee(e);
+                    }catch(Exception ex){
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Couldn't update this employee");
+                        alert.setContentText(ex.getMessage());
+                        alert.showAndWait();
+                    }
+                }
+            });
+        }catch(Exception exception){//Show alert
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Make your that you have selected a employee");
+            alert.setContentText(exception.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    private void deleteEmployeeDialog(Employee e){
+        if(e == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Make your that you have selected a employee");
+            alert.setContentText("");
+            alert.showAndWait();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete employee");
+            alert.setHeaderText("Are you sure you want to delete this employee?");
+            alert.setContentText("This action cannot be undone");
+            alert.showAndWait().ifPresent(button -> {
+                if(button.equals(ButtonType.OK)){
+                    try{
+                        this.model.deleteEmployee(e);
+                    }catch(Exception ex){
+                        Alert alert2 = new Alert(Alert.AlertType.ERROR);
+                        alert2.setTitle("Error");
+                        alert2.setHeaderText("Couldn't delete this employee");
+                        alert2.setContentText(ex.getMessage());
+                        alert2.showAndWait();
+                    }
+                }
+            });
+        }
+    }
+
+
     private boolean searchFind(Searchable s, String search){
         return String.valueOf(s.getId()).contains(search) || s.getName().toString().toLowerCase().contains(search.toLowerCase()) || s.getDescription().toString().toLowerCase().contains(search.toLowerCase());
     }

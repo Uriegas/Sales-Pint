@@ -5,14 +5,12 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.*;
 import com.uriegas.Model.*;
-import javafx.collections.*;
 import javafx.collections.transformation.*;
 import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.*;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.application.Application;
 import javafx.beans.property.*;
 /**
@@ -78,19 +76,6 @@ public class FXMLController implements Initializable {
         this.productdescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         this.productid.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 
-        // settings_btn.setOnAction(event -> {
-        //     //Create dialog to choose between add a product or a offert
-        //     ChoiceDialog<String> dialog = new ChoiceDialog<>("Add/modify product", "Add/modify offer");
-        //     dialog.setHeaderText("Settings");
-        //     dialog.setContentText("Choose what you want to do");
-        //     // dialog.getDialogPane().getStylesheets().add(getClass().getResource("/styles/Styles.css").toExternalForm());
-        //     dialog.showAndWait().ifPresent(choice -> {
-        //         if(choice.equals("Add/modify product"))//Create dialog for the selected product
-        //             // addProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
-        //         else if(choice.equals("Add/modify offer"))//Create dialog to choose between add a product or a offert
-        //             addOfferDialog();
-        //     });
-        // });
         settings_btn.setOnAction(event -> {
             new Application() {
             @Override
@@ -154,6 +139,35 @@ public class FXMLController implements Initializable {
                 alert.showAndWait();
             }
         });
+    // clear_btn.setOnAction(event -> {
+    //         try{
+    //             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EmployeeDialog.fxml"));
+    //             Parent root = loader.load();
+    //             EmployeeDialogController controller = loader.getController();
+    //             Employee employee = new Employee(12, "Eduardo", "hola");
+    //             System.out.println( DataModel.DEBUG + employee.toString());
+    //             controller.setEmployee(employee);
+    //             Dialog<ButtonType> dialog = new Dialog<>();
+    //             dialog.setTitle("Add Employee");
+    //             dialog.setDialogPane((DialogPane) root);
+    //             dialog.showAndWait().ifPresent(button -> {
+    //                 if (button == ButtonType.OK) {
+    //                     try {
+    //                         System.out.println("OK");
+    //                     } catch (Exception e) {
+    //                         e.printStackTrace();
+    //                     }
+    //                 }
+    //             });
+    //             System.out.println( DataModel.DEBUG + employee.toString());
+    //         }catch(Exception e){
+    //             Alert alert = new Alert(Alert.AlertType.ERROR);
+    //             alert.setTitle("Error");
+    //             alert.setHeaderText("Couldn't perform this action.");
+    //             alert.setContentText(e.getMessage());
+    //             alert.showAndWait();
+    //         }
+    //     });
     }
     /**
      * Dialog to delete a product
@@ -271,9 +285,9 @@ public class FXMLController implements Initializable {
             alert.showAndWait();
         }
     }
-    private void addOfferDialog(){
-        System.out.println("Add/modify offer");
-    }
+    // private void addOfferDialog(){
+    //     System.out.println("Add/modify offer");
+    // }
     private boolean searchFind(Searchable s, String search){
         return String.valueOf(s.getId()).contains(search) || s.getName().toString().toLowerCase().contains(search.toLowerCase()) || s.getDescription().toString().toLowerCase().contains(search.toLowerCase());
     }

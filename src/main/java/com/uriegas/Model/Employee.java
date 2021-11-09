@@ -10,6 +10,10 @@ public class Employee implements Searchable {
     private StringProperty name = new SimpleStringProperty();
     private StringProperty password = new SimpleStringProperty();
     /**
+     * Empty constructor for new Employee
+     */
+    public Employee() {}
+    /**
      * The employee's constructor.
      * @param id The employee's id.
      * @param name The employee's name.
@@ -37,16 +41,17 @@ public class Employee implements Searchable {
     public IntegerProperty idProperty() { return id; }
     public int getId() { return id.get(); }
     public void setId(int id) { this.id.set(id); }
-    public StringProperty descriptionProperty() { return name; }
-    public String getDescription() { return name.get(); }
-    public void setDescription(String description) { this.name.set(description); }
-    public StringProperty passwordProperty() { return password; }
-    public String getPassword() { return password.get(); }
-    public void setPassword(String password) { this.password.set(password); }
+    public StringProperty descriptionProperty() { return password; }
+    public String getDescription() { return password.get(); }
+    public void setDescription(String password) { this.password.set(password); }
+    // public StringProperty passwordProperty() { return password; }
+    // public String getPassword() { return password.get(); }
+    // public void setPassword(String password) { this.password.set(password); }
     // <== Getters and setters
     public int compareTo(Searchable o){
         return Integer.valueOf(this.getId()).compareTo(Integer.valueOf(((Employee)o).getId()));
     }
     @Override
     public String toString() {return "Employee(" + id.get() + ", " + name.get() + ", " + password.get() + ")";}
+    public Employee clone() { return new Employee(getId(), getName(), getDescription()); }
 }

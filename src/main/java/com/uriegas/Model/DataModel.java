@@ -23,7 +23,7 @@ public class DataModel {
     public static String SALES = "sales";
     public static String ORDERS = "orders";//An order is a bunch of sales
     public static String EMPLOYEES = "employees";//An order is a bunch of sales
-    public static int ID = 1, NAME = 2, DESCRIPTION = 3, TYPE = 3, PRICE = 4, PRODUCT_ID = 4, STOCK = 5, PASSWORD = 6;
+    public static int ID = 1, NAME = 2, DESCRIPTION = 3, TYPE = 3, PRICE = 4, PRODUCT_ID = 4, STOCK = 5, PASSWORD = 3;
 
     private Connection connection;
     //The cart is a list of products
@@ -200,8 +200,13 @@ public class DataModel {
         System.out.println(INFO + " " + LocalDate.now() + " " + "Product " + product.getName() + " added");
     }
 
-    public ObservableList<Searchable> getEmployee(){
-        String query = "SELECT * FROM " + EMPLOYEES;
+    // ==> CRUD for employees
+    /**
+     * SELECT * FROM employees
+     * @return list of employees
+     */
+    public ObservableList<Searchable> getEmployees(){
+        String query = "SELECT * FROM " + EMPLOYEES + " ORDER BY id;";
         ObservableList<Searchable> employees = FXCollections.observableArrayList();
         try {
             Statement stmt = connection.createStatement();
@@ -215,4 +220,46 @@ public class DataModel {
         }
         return employees;
     }
+
+    /**
+     * UPDATE employees SET name = 'name', password = 'password' WHERE id = id
+     * @param e
+     * @throws SQLException
+     */
+    public void updateEmployee(Employee e) throws SQLException {
+        String query = "UPDATE " + EMPLOYEES + " SET name = '" + e.getName() +
+                          "', password = '" + e.getDescription() +
+                          "' WHERE id = " + e.getId();
+        System.out.println(INFO + "Query is: " + query);
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println(INFO + " " + LocalDate.now() + " " + "Employee " + e.getName() + " updated");
+    }
+
+    /**
+     * DELETE FROM employees WHERE id = id
+     * @param e
+     * @throws SQLException
+     */
+    public void deleteEmployee(Employee e) throws SQLException {
+        String query = "DELETE FROM " + EMPLOYEES + " WHERE id = " + e.getId();
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println(INFO + " " + LocalDate.now() + " " + "Employee " + e.getName() + " deleted");
+    }
+
+    /**
+     * INSERT INTO employees (id, name, password) VALUES (id, name, password)
+     * @param e
+     * @throws SQLException
+     */
+    public void addEmployee(Employee e) throws SQLException {
+        String query = "INSERT INTO " + EMPLOYEES +
+                       " (id, name, password) VALUES (" + e.getId() + ", '" + e.getName() +
+                       "', '" + e.getDescription() + "')";
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println(INFO + " " + LocalDate.now() + " " + "Employee " + e.getName() + " added");
+    }
+    // <== CRUD for employees
 }

@@ -6,24 +6,26 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.stage.*;
 
 public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Scene.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin.fxml"));
         Parent root = loader.load();
 
         // ==> Load model
-        FXMLController controller = loader.getController();
+        AdminController controller = loader.getController();
         controller.initModel(new DataModel());
         // <== Load model
 
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
-        
+
         stage.setTitle("Caja registradora");
+        stage.getIcons().add(new Image(MainApp.class.getResourceAsStream("/styles/logo.png")));
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
