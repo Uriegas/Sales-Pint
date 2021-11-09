@@ -13,7 +13,7 @@ import javafx.stage.*;
 
 public class LoginController implements Initializable {
     @FXML private TextField username;
-    @FXML private TextField password;
+    @FXML private PasswordField password;
     @FXML private Button button;
     @Override
     public void initialize(URL location, ResourceBundle resources) {

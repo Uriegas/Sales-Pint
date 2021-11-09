@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -16,7 +17,7 @@
                </image>
             </ImageView>
             <TextField fx:id="username" layoutX="61.0" layoutY="184.0" prefHeight="25.0" prefWidth="209.0" promptText="Usuario" styleClass="login-info" />
-            <TextField fx:id="password" layoutX="61.0" layoutY="223.0" prefHeight="25.0" prefWidth="209.0" promptText="Contraseña" styleClass="login-info" />
+            <PasswordField fx:id="password" layoutX="61.0" layoutY="223.0" prefHeight="25.0" prefWidth="209.0" promptText="Contraseña" styleClass="login-info" />
             <Button fx:id="button" layoutX="115.0" layoutY="271.0" maxWidth="136.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="136.0" styleClass="button-login" text="LOGIN" />
          </children>
       </Pane>
