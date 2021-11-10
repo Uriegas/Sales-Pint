@@ -1,13 +1,11 @@
 package com.uriegas;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.*;
 import com.uriegas.Model.*;
 import javafx.collections.transformation.*;
 import javafx.fxml.*;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.*;
@@ -33,12 +31,11 @@ public class CashierController implements Initializable {
     @FXML private TableColumn<Product, Integer> salesproductquantity;
     @FXML private TableColumn<Product, Double> salesproductprice;
     @FXML private Button commitsale;
+    @FXML private Button devolution;
     @FXML private Label totalprice;
-    @FXML private Button addbtn;
-    @FXML private Button updatebtn;
-    @FXML private Button deletebtn;
     DoubleProperty totalpriceProperty = new SimpleDoubleProperty(0.00);
     private FilteredList<Searchable> filteredList;
+
     /**
      * Get the model
      */
@@ -112,16 +109,6 @@ public class CashierController implements Initializable {
         };
         this.carrito.setCellFactory(cellFactory);
 
-        addbtn.setOnAction(event -> {
-            addProductDialog(new Product());
-            
-        });
-        updatebtn.setOnAction(event -> {
-            updateProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
-        });
-        deletebtn.setOnAction(event -> {
-            deleteProductDialog((Product)searchableproducts.getSelectionModel().getSelectedItem());
-        });
         commitsale.setOnAction(event -> {
             try{
                 this.model.makeSale();
@@ -142,126 +129,25 @@ public class CashierController implements Initializable {
         clear_btn.setOnAction(event -> {
             searchbar.clear();
         });
-    }
-    /**
-     * Dialog to delete a product
-     * @param p selected product
-     */
-    private void deleteProductDialog(Product product) {
-        if(product != null){
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Delete product");
-            alert.setHeaderText("Delete product");
-            alert.setContentText("Are you sure you want to delete this product?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                try{
-                    model.deleteProduct(product);
-                }catch(Exception e){
-                    Alert alert2 = new Alert(Alert.AlertType.ERROR);
-                    alert2.setTitle("Error");
-                    alert2.setHeaderText("An error ocurred");
-                    alert2.setContentText("Could not delete this product");
-                    alert2.showAndWait();
-                }
+        devolution.setOnAction(event ->{
+            try{
+                this.model.makeDevolution();
+                //Show success message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Devolution");
+                alert.setHeaderText("Devolution successful");
+                alert.setContentText("The devolution was successful");
+                alert.showAndWait();
+            }catch(Exception e){//Show alert
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(e.getClass().getName());
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
             }
-        }else{
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("An error ocurred");
-            alert.setContentText("You haven't select any product yet");
-            alert.showAndWait();
-        }
+        });
     }
-    /**
-     * Dialog to add a product
-     * @param p an empty product
-     */
-    private void addProductDialog(Product p) {
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
-            Parent root = loader.load();
-            ProductDialogController controller = loader.getController();
-            controller.setProduct(p);
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Add/modify product");
-            dialog.setDialogPane((DialogPane)root);
-            dialog.showAndWait().ifPresent(button -> {
-                if(button.equals(ButtonType.OK)){//Save product to database
-                    System.out.println("INFO " + p.toString());
-                    try{
-                        this.model.addProduct(p);
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Success");
-                        alert.setHeaderText("Product added");
-                        alert.setContentText("The product will appear in the list the next time you start the app");
-                        alert.showAndWait();
-                        
-                    }catch(Exception e){
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Couldn't add this product to the DB");
-                        alert.setContentText(e.getMessage());
-                        alert.showAndWait();
-                    }
-                }
-            });
-        }catch(Exception e){//Show alert
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Couldn't perform this action.");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
-    }
-
-    /**
-     * Dialog to update a product
-     * @param p the selected product
-     */
-    private void updateProductDialog(Product p){
-        try{
-            final Product copy = p.clone();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductDialog.fxml"));
-            Parent root = loader.load();
-            ProductDialogController controller = loader.getController();
-            controller.setProduct(p);
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Update product");
-            dialog.setDialogPane((DialogPane)root);
-            dialog.showAndWait().ifPresent(button -> {
-                if(button.equals(ButtonType.CANCEL)){
-                    p.setName(copy.getName());
-                    p.setDescription(copy.getDescription());
-                    p.setId(copy.getId());
-                    p.setStock(copy.getStock());
-                    p.setPrice(copy.getPrice());
-                    System.out.println("Cancel");
-                }
-                else if(button.equals(ButtonType.OK)){
-                    System.out.println("INFO " + p.toString());
-                    try{
-                        this.model.updateProduct(p);
-                    }catch(Exception e){
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Couldn't update this product");
-                        alert.setContentText(e.getMessage());
-                        alert.showAndWait();
-                    }
-                }
-            });
-        }catch(Exception e){//Show alert
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Make your that you have selected a product");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
-    }
-    // private void addOfferDialog(){
-    //     System.out.println("Add/modify offer");
-    // }
+    
     private boolean searchFind(Searchable s, String search){
         return String.valueOf(s.getId()).contains(search) || s.getName().toString().toLowerCase().contains(search.toLowerCase()) || s.getDescription().toString().toLowerCase().contains(search.toLowerCase());
     }

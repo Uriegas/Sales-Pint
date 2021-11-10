@@ -239,7 +239,15 @@
     -width: 100px;
     -fx-text-fill: white;
 }
-.exit-button:hover{
+.button-venta:hover {
+    -fill: rgb(40, 223, 40);
+}
+.button-devolucion {
+    -height: 30px;
+    -width: 100px;
+    -fx-text-fill: white;
+}
+.button-devolucion:hover, .exit-button:hover{
     -fill: red;
 }
 

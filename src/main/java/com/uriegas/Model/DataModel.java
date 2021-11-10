@@ -185,6 +185,24 @@ public class DataModel {
             updateProduct(product);
         // Reduce the stock of the products in the cart
     }
+    /**
+     * Commit a devolution of the products in the cart to the database
+     */
+    public void makeDevolution() throws SQLException {
+        ObservableList<Product> products = getProducts();
+        //Quasi O(n^2) loop :-(
+        for(Product product : cart) {
+            for(Product p : products) {
+                if(p.getId() == product.getId()) {
+                    p.setStock(p.getStock() + product.getStock());
+                    break;
+                }
+            }
+        }
+        for(Product product : products)
+            updateProduct(product);
+        // Reduce the stock of the products in the cart
+    }
     public void deleteProduct(Product product) throws SQLException {
         String query = "DELETE FROM " + PRODUCTS + " WHERE id = " + product.getId();
         Statement stmt = connection.createStatement();

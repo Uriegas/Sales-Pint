@@ -23,3 +23,6 @@ Se necesita la implementación de una caja registradora (stand alone) la cual te
     * Uso de SQLite como gestor de base de datos. **Ready**
     * No se requiere inicio de sesión **Ready**
     * Diseño de pantallas "estéticas" mediante uso de JavaFX-CSS 
+
+## TODO  
+The logic of the makeSale and makeDevolution can be improved, currently the time complexity is $O(n^2)$.
