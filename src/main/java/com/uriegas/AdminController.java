@@ -37,6 +37,7 @@ public class AdminController implements Initializable {
     @FXML private TableColumn<Product, String> productName;
     @FXML private TableColumn<Product, String> productDescription;
     @FXML private TableColumn<Product, Double> productPrice;
+    @FXML private TableColumn<Product, Integer> productQuantity;
 
     @FXML private TableView<Searchable> employeeTable;
     @FXML private TableColumn<Searchable, Integer> employeeId;
@@ -84,6 +85,7 @@ public class AdminController implements Initializable {
         this.productDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         this.productId.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
         this.productPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+        this.productQuantity.setCellValueFactory(cellData -> cellData.getValue().stockProperty().asObject());
 
         addProduct.setOnAction(event -> {
             addProductDialog(new Product());

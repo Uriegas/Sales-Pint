@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox prefHeight="487.0" prefWidth="751.0" styleClass="background-pane" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.AdminController">
+<HBox prefHeight="487.0" prefWidth="832.0" styleClass="background-pane" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uriegas.AdminController">
    <children>
-      <VBox prefHeight="467.0" prefWidth="384.0">
+      <VBox prefHeight="467.0" prefWidth="544.0">
          <children>
             <StackPane prefWidth="248.0" styleClass="column-header-background">
                <children>
@@ -43,12 +43,13 @@
                   <Insets left="5.0" right="5.0" />
                </VBox.margin>
             </ButtonBar>
-            <TableView fx:id="productTable" prefWidth="381.0" VBox.vgrow="ALWAYS">
+            <TableView fx:id="productTable" prefWidth="392.0" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="productId" editable="false" minWidth="9.0" prefWidth="52.0" text="ID" />
-                <TableColumn fx:id="productName" editable="false" prefWidth="106.0" text="Producto" />
-                <TableColumn fx:id="productDescription" editable="false" prefWidth="121.0" text="Descripcion" />
-                  <TableColumn fx:id="productPrice" prefWidth="69.0" text="Price" />
+                <TableColumn fx:id="productId" editable="false" minWidth="9.0" prefWidth="50.0" text="ID" />
+                <TableColumn fx:id="productName" editable="false" prefWidth="108.0" text="Producto" />
+                <TableColumn fx:id="productDescription" editable="false" prefWidth="127.0" text="Descripcion" />
+                  <TableColumn fx:id="productPrice" prefWidth="64.0" text="Price" />
+                  <TableColumn fx:id="productQuantity" text="Cantidad" />
               </columns>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -59,7 +60,7 @@
             <Insets right="5.0" />
          </padding>
       </VBox>
-      <VBox prefHeight="467.0" prefWidth="384.0">
+      <VBox prefHeight="467.0" prefWidth="432.0">
          <children>
             <StackPane prefWidth="248.0" styleClass="column-header-background">
                <children>
